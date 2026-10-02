@@ -39,12 +39,12 @@
   let favorites = new Set(loadSetting("aural-favorites", []));
   let currentMode = "Focus";
 
-  const demoPlaylistMap = {
-    Focus: [],
-    Build: [],
-    Debug: [],
-    Chill: [],
-    "God Mode": []
+  const moodFolders = {
+    Focus: "music/focus",
+    Build: "music/build",
+    Debug: "music/debug",
+    Chill: "music/chill",
+    "God Mode": "music/god-mode"
   };
 
   const modeLabels = {
@@ -197,30 +197,52 @@
     currentIndex = -1;
   }
 
-  function loadDemoPlaylist(modeName) {
-    const items = demoPlaylistMap[modeName] || demoPlaylistMap.Focus;
+  async function loadMoodPlaylist(modeName) {
+    const folder = moodFolders[modeName] || moodFolders.Focus;
     resetTrackLibrary();
-
-    tracks = items.map((item, index) => ({
-      id: `${modeName}-${index}-${item.title}`,
-      title: item.title,
-      artist: item.artist,
-      album: modeName,
-      src: item.src,
-      file: null
-    }));
-
     updateModeSelection(modeName);
-    updateEmptyState();
-    updateNowPlaying();
-    renderQueue();
 
-    if (tracks.length) {
-      loadTrack(0, false);
-      updateControls();
-    } else {
-      trackTitle.textContent = "No demo tracks loaded";
-      trackArtist.textContent = "Use Add tracks to select your music.";
+    try {
+      const response = await fetch(folder);
+      if (!response.ok) throw new Error(`Folder not found: ${folder}`);
+
+      const html = await response.text();
+      const matches = [...html.matchAll(/href="([^"]+\.(?:mp3|wav|m4a|ogg|flac|aac))"/gi)];
+      const files = matches
+        .map((match) => match[1].split('/').pop())
+        .filter((name, index, arr) => arr.indexOf(name) === index);
+
+      if (!files.length) {
+        trackTitle.textContent = `No songs in ${modeName}`;
+        trackArtist.textContent = `Add audio files to ${folder}/`;
+        updateEmptyState();
+        updateNowPlaying();
+        renderQueue();
+        updateControls();
+        return;
+      }
+
+      tracks = files.map((fileName, index) => {
+        const src = `${folder.replace(/\/$/, "")}/${fileName}`;
+        return {
+          id: `${modeName}-${index}-${fileName}`,
+          title: titleFromFilename(fileName),
+          artist: "Mood playlist",
+          album: modeName,
+          src,
+          file: null
+        };
+      });
+
+      updateEmptyState();
+      renderQueue();
+      loadTrack(0, true);
+    } catch (error) {
+      trackTitle.textContent = `No songs in ${modeName}`;
+      trackArtist.textContent = `Add audio files to ${folder}/`;
+      updateEmptyState();
+      updateNowPlaying();
+      renderQueue();
       updateControls();
     }
   }
@@ -412,11 +434,11 @@
 
   modeButtons.forEach((button) => {
     button.addEventListener("click", () => {
-      loadDemoPlaylist(button.textContent.trim());
+      loadMoodPlaylist(button.textContent.trim());
     });
   });
 
-  demoButton.addEventListener("click", () => loadDemoPlaylist(currentMode));
+  demoButton.addEventListener("click", () => loadMoodPlaylist(currentMode));
 
   fileInput.addEventListener("change", () => {
     handleFiles(fileInput.files);

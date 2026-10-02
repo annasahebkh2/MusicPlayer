@@ -137,11 +137,25 @@ button { color: inherit; }
   transition: .2s ease;
 }
 
+.mode-button.special {
+  color: #fef3c7;
+  border-color: rgba(250, 204, 21, 0.25);
+  background: linear-gradient(135deg, rgba(250, 204, 21, 0.08), rgba(168, 85, 247, 0.08));
+}
+
 .mode-button.active,
 .mode-button:hover {
   color: var(--text);
   background: rgba(125, 211, 252, 0.08);
   border-color: rgba(125, 211, 252, 0.2);
+}
+
+.mode-button.special.active,
+.mode-button.special:hover {
+  color: #fff7d6;
+  background: linear-gradient(135deg, rgba(250, 204, 21, 0.12), rgba(168, 85, 247, 0.12));
+  border-color: rgba(250, 204, 21, 0.45);
+  box-shadow: 0 0 18px rgba(250, 204, 21, 0.12);
 }
 
 .search-box {
