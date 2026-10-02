@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#0b0b10" />
+  <meta name="description" content="DEVTAPE — a premium developer-focused audio player for deep work." />
+  <title>DEVTAPE — Developer Audio Player</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="ambient ambient-one"></div>
+  <div class="ambient ambient-two"></div>
+
+  <main class="app-shell">
+    <header class="topbar">
+      <div class="brand">
+        <div class="brand-mark">&lt;/&gt;</div>
+        <div>
+          <div class="brand-name">DEVTAPE</div>
+          <div class="brand-subtitle">focus mode audio</div>
+        </div>
+      </div>
+
+      <div class="top-actions">
+        <div class="mode-switcher" aria-label="Session modes">
+          <button class="mode-button active" type="button">Focus</button>
+          <button class="mode-button" type="button">Build</button>
+          <button class="mode-button" type="button">Debug</button>
+          <button class="mode-button" type="button">Chill</button>
+        </div>
+        <label class="search-box" aria-label="Search playlist">
+          <span class="icon">⌕</span>
+          <input id="searchInput" type="search" placeholder="grep tracks" autocomplete="off" />
+        </label>
+        <button id="demoButton" class="button button-secondary" type="button">Demo playlist</button>
+        <button id="uploadButton" class="button button-primary" type="button">
+          <span>＋</span> Add tracks
+        </button>
+        <input id="fileInput" type="file" accept="audio/*" multiple hidden />
+      </div>
+    </header>
+
+    <section class="player-layout">
+      <section class="now-playing-panel">
+        <div id="dropZone" class="artwork-wrap" tabindex="0" aria-label="Drop audio files here">
+          <div class="artwork-glow"></div>
+          <div id="artwork" class="artwork">
+            <div class="artwork-shine"></div>
+            <div class="artwork-letter">A</div>
+            <div class="artwork-caption">YOUR MUSIC</div>
+          </div>
+          <div class="artwork-badge">NOW PLAYING</div>
+        </div>
+
+        <div class="track-heading">
+          <div>
+            <p id="trackTitle" class="track-title">No track loaded</p>
+            <p id="trackArtist" class="track-artist">Add your music to begin</p>
+          </div>
+          <button id="favoriteButton" class="icon-button" type="button" aria-label="Favorite">♡</button>
+        </div>
+
+        <div class="track-meta" aria-label="Track metadata">
+          <span class="meta-pill">focus</span>
+          <span class="meta-pill">local</span>
+          <span class="meta-pill">320kbps</span>
+          <span class="meta-pill">session 42</span>
+        </div>
+
+        <div class="session-stats" aria-label="Session stats">
+          <div class="stat-block">
+            <span class="stat-label">queue</span>
+            <strong id="queueCount">0</strong>
+          </div>
+          <div class="stat-block">
+            <span class="stat-label">status</span>
+            <strong id="statusText">ready</strong>
+          </div>
+          <div class="stat-block">
+            <span class="stat-label">mood</span>
+            <strong id="moodText">deep work</strong>
+          </div>
+        </div>
+
+        <div class="progress-area">
+          <input id="progress" class="range progress" type="range" min="0" max="100" value="0" step="0.1" aria-label="Track progress" />
+          <div class="time-row">
+            <span id="currentTime">0:00</span>
+            <span id="duration">0:00</span>
+          </div>
+        </div>
+
+        <div class="controls">
+          <button id="shuffleButton" class="control-button" type="button" aria-label="Shuffle" aria-pressed="false">⤨</button>
+          <button id="previousButton" class="control-button" type="button" aria-label="Previous">◀</button>
+          <button id="playButton" class="play-button" type="button" aria-label="Play">▶</button>
+          <button id="nextButton" class="control-button" type="button" aria-label="Next">▶</button>
+          <button id="repeatButton" class="control-button" type="button" aria-label="Repeat" aria-pressed="false">↻</button>
+        </div>
+
+        <div class="volume-row">
+          <button id="muteButton" class="mini-button" type="button" aria-label="Mute">◖</button>
+          <input id="volume" class="range volume" type="range" min="0" max="1" value="0.8" step="0.01" aria-label="Volume" />
+          <span id="volumeLabel">80%</span>
+        </div>
+
+        <div class="hint">
+          <span>Space</span> play/pause
+          <span>← →</span> seek
+          <span>↑ ↓</span> volume
+          <span>M</span> mute
+        </div>
+      </section>
+
+      <aside class="queue-panel">
+        <div class="queue-header">
+          <div>
+            <p class="eyebrow">YOUR LIBRARY</p>
+            <h2>Up next</h2>
+          </div>
+          <button id="clearButton" class="text-button" type="button">Clear</button>
+        </div>
+
+        <div id="emptyState" class="empty-state">
+          <div class="empty-icon">♫</div>
+          <h3>Your queue is empty</h3>
+          <p>Add MP3, WAV, M4A, OGG, FLAC, or other browser-supported audio files.</p>
+          <button id="emptyUploadButton" class="button button-secondary" type="button">Choose audio files</button>
+        </div>
+
+        <div id="queue" class="queue" role="list"></div>
+
+        <div class="drop-tip">
+          <strong>Tip</strong>
+          You can also drag audio files anywhere onto this page.
+        </div>
+      </aside>
+    </section>
+
+    <footer class="footer">
+      <span>Made with HTML, CSS &amp; JavaScript.</span>
+      <span>Local-first • No account required</span>
+    </footer>
+  </main>
+
+  <audio id="audio" preload="metadata"></audio>
+  <script src="app.js"></script>
+</body>
+</html>
