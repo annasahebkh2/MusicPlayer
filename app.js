@@ -40,33 +40,19 @@
   let currentMode = "Focus";
 
   const demoPlaylistMap = {
-    Focus: [
-      { title: "Focus Drift", artist: "Night Circuit", src: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" },
-      { title: "Silent Build", artist: "Static Loop", src: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3" },
-      { title: "Code in Motion", artist: "Signal Bloom", src: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-3.mp3" }
-    ],
-    Build: [
-      { title: "Compile Sunrise", artist: "Byte Harbor", src: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-4.mp3" },
-      { title: "Deploy Lights", artist: "Terminal Echo", src: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-5.mp3" },
-      { title: "Merge Dreams", artist: "Code Tide", src: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-6.mp3" }
-    ],
-    Debug: [
-      { title: "Stack Trace", artist: "Kernel Bloom", src: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-7.mp3" },
-      { title: "Patch Notes", artist: "Error Wave", src: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-8.mp3" },
-      { title: "Rebuild Flow", artist: "Launch State", src: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-9.mp3" }
-    ],
-    Chill: [
-      { title: "After Commit", artist: "Soft Query", src: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-10.mp3" },
-      { title: "Low Latency", artist: "Cloud Hum", src: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-11.mp3" },
-      { title: "Nightly Sync", artist: "Quiet Buffer", src: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-12.mp3" }
-    ]
+    Focus: [],
+    Build: [],
+    Debug: [],
+    Chill: [],
+    "God Mode": []
   };
 
   const modeLabels = {
     Focus: "deep work",
     Build: "build mode",
     Debug: "debug cycle",
-    Chill: "chill coding"
+    Chill: "chill coding",
+    "God Mode": "legend status"
   };
 
   audio.volume = Number(previousVolume);
@@ -231,6 +217,10 @@
 
     if (tracks.length) {
       loadTrack(0, false);
+      updateControls();
+    } else {
+      trackTitle.textContent = "No demo tracks loaded";
+      trackArtist.textContent = "Use Add tracks to select your music.";
       updateControls();
     }
   }
@@ -595,5 +585,9 @@
     });
   });
 
-  loadDemoPlaylist("Focus");
+  updateModeSelection("Focus");
+  updateEmptyState();
+  renderQueue();
+  updateNowPlaying();
+  updateControls();
 })();
